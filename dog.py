@@ -163,6 +163,8 @@ class Game:
                 self._rewindCurrentPlayer()
 
             self.players.pop(deletedOffset)
+        
+        logging.info(f'{player.showPlayer()} has lost')
 
     def getPlayers(self) -> List[Player]:
         return [p for p in self.players]
