@@ -518,6 +518,8 @@ if __name__ == '__main__':
             logging.info('everyone lost')
             break
     
+    losers = [p.showPlayer() for p in game.totalPlayers if p not in game.players]
+    logging.info(f'losers: {", ".join(losers)}')
     logging.info(f'total turns: {game.totalTurns}')
     stats = [p.stats() for p in game.totalPlayers]
     logging.info(f'player stats: {json.dumps(stats)}')
