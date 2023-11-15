@@ -493,11 +493,24 @@ BOARD = [
     (effect_48, None, 'On your turn, everyone rolls a die. If you have the highest number, you win. If you tie for the highest or someone\'s roll beats yours, go back twenty spaces')
 ]
 
+RESERVED_CHARS = {',', '(', ')'}
+def isNameAllowed(name: str) -> bool:
+    for c in name:
+        if c in RESERVED_CHARS:
+            return False
+    
+    return True
+
 if __name__ == '__main__':
     argParser = argparse.ArgumentParser(description='Simulate that fuckin\' dog game')
     argParser.add_argument('players', nargs='+', help='names of the players')
     argParser.add_argument('-s', '--seed', type=int, default=random.randrange(sys.maxsize), help='random seed, as an integer; by default a random value, probably time-based')
     args = argParser.parse_args()
+
+    for name in args.players:
+        if not isNameAllowed(name):
+            print(f'name not allowed: {name}', file=sys.stderr)
+            sys.exit(1)
 
     logging.basicConfig(
         format='%(asctime)s %(message)s',
