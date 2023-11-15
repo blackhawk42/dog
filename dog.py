@@ -505,6 +505,8 @@ if __name__ == '__main__':
     argParser = argparse.ArgumentParser(description='Simulate that fuckin\' dog game')
     argParser.add_argument('players', nargs='+', help='names of the players')
     argParser.add_argument('-s', '--seed', type=int, default=random.randrange(sys.maxsize), help='random seed, as an integer; by default a random value, probably time-based')
+    argParser.add_argument('-o', '--output', type=Path, default=None, help='output file, in addition to the normal output (see: --silent)')
+    argParser.add_argument('-S', '--silent', action='store_true', help='silence normal output to stderr; won\'t affect output file, if any')
     args = argParser.parse_args()
 
     for name in args.players:
@@ -515,9 +517,16 @@ if __name__ == '__main__':
     logging.basicConfig(
         format='%(asctime)s %(message)s',
         level=logging.INFO,
-        stream=sys.stdout,
     )
     logging.Formatter.formatTime = logging.Formatter.formatTime = (lambda self, record, datefmt=None: datetime.datetime.fromtimestamp(record.created).astimezone().isoformat(sep="T",timespec="milliseconds"))
+
+    if args.silent:
+        logging.getLogger().handlers.clear()
+    
+    if args.output is not None:
+        fileHandler = logging.FileHandler(str(args.output), 'w', encoding='utf-8')
+        fileHandler.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+        logging.getLogger().addHandler(fileHandler)
 
     logging.info(f'seed: {args.seed}')
     game = newGame(args.seed, args.players, BOARD)
