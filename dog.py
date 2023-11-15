@@ -41,7 +41,7 @@ class Player:
 
         # Logging
         currentPlace = self.getCurrentPlace()
-        logMessage = f'{self.name} ({self.id}) moved {step} to place {currentPlace.id}'
+        logMessage = f'{self.showPlayer()} moved {step} to place {currentPlace.id}'
         if currentPlace.message is not None:
             logMessage = f'{logMessage}, message: {currentPlace.message}'
         logging.info(logMessage)
