@@ -152,7 +152,7 @@ class Game:
         if player == self.players[self.currentPlayerOffset]:
             self._rewindCurrentPlayer()
             self.players.pop(self._nextPlayerOffset())
-        # Otherwise, we just linear search, and fix currentPlayerOffset if we need
+        # Otherwise, we just search, and fix currentPlayerOffset if we need
         # to
         else:
             deletedOffset = self.players.index(player)
@@ -164,6 +164,11 @@ class Game:
 
             self.players.pop(deletedOffset)
         
+        # Sometimes, when we rewinded to the last player, the offset will be out
+        # sync ny 1 after the pop. We fix it, if this is the case
+        if self.currentPlayerOffset >= len(self.players):
+            self._rewindCurrentPlayer()
+
         logging.info(f'{player.showPlayer()} has lost')
 
     def getPlayers(self) -> List[Player]:
@@ -249,6 +254,10 @@ class Game:
                         newMovedPlayers.add(p)
             movedPlayers = newMovedPlayers
         
+        # If there's only one player remaining, win it
+        if len(self.players) == 1:
+            return self.players[0]
+
         # Finally, check if there was no movement because everyone lost
         if self.everyoneLost():
             return False
