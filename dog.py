@@ -135,9 +135,15 @@ class Game:
     totalTurns: int
 
     def _nextPlayerOffset(self) -> int:
+        if len(self.players) == 0:
+            return 0
+        
         return (self.currentPlayerOffset + 1) % len(self.players)
     
     def _lastPlayerOffset(self) -> int:
+        if len(self.players) == 0:
+            return 0
+        
         return (self.currentPlayerOffset - 1) % len(self.players)
     
     def _advanceCurrentPlayer(self):
@@ -255,8 +261,8 @@ class Game:
             movedPlayers = newMovedPlayers
         
         # If there's only one player remaining, win it
-        if len(self.players) == 1:
-            return self.players[0]
+        # if len(self.players) == 1:
+        #     return self.players[0]
 
         # Finally, check if there was no movement because everyone lost
         if self.everyoneLost():
