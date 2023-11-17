@@ -192,7 +192,7 @@ if __name__ == '__main__':
     argParser = argparse.ArgumentParser('convert the logs of a dog session into images')
     argParser.add_argument('doglog', type=Path, help='log of a dog seesion')
     argParser.add_argument('-o', '--output', type=Path, default=None, help='output gif; by default name of the doglog with suffix changed to ".gif"')
-    argParser.add_argument('-f', '--framrate', type=int, default=1000, help='duration of a frame, in miliseconds')
+    argParser.add_argument('-d', '--duration', type=lambda d: float(d)*1000, default=1000, help='duration of a frame, in seconds; default 1 second')
     args = argParser.parse_args()
 
     if args.output is None:
@@ -268,5 +268,5 @@ if __name__ == '__main__':
         loop=0,
         save_all=True,
         append_images=frames[1:],
-        duration=args.framrate,
+        duration=args.duration,
     )
